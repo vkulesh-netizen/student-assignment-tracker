@@ -1,0 +1,125 @@
+{
+  "projectId": "PVT_kwHODzJK-M4Bpfz-",
+  "url": "https://github.com/users/vkulesh-netizen/projects/1",
+  "private": true,
+  "views": [
+    {
+      "id": "PVTV_lAHODzJK-M4Bpfz-zgMU2ls",
+      "name": "View 1",
+      "layout": "TABLE_LAYOUT",
+      "number": 1
+    },
+    {
+      "id": "PVTV_lAHODzJK-M4Bpfz-zgMU2pw",
+      "name": "Product backlog",
+      "layout": "TABLE_LAYOUT",
+      "number": 2
+    },
+    {
+      "id": "PVTV_lAHODzJK-M4Bpfz-zgMU2p0",
+      "name": "Task board",
+      "layout": "BOARD_LAYOUT",
+      "number": 3
+    }
+  ],
+  "items": [
+    {
+      "id": "US01",
+      "title": "Register and sign in",
+      "suggestedOwner": "Hamzah",
+      "url": "https://github.com/vkulesh-netizen/student-assignment-tracker/issues/1",
+      "status": "In Progress"
+    },
+    {
+      "id": "US02",
+      "title": "Keep each user's assignments private",
+      "suggestedOwner": "Hamzah",
+      "url": "https://github.com/vkulesh-netizen/student-assignment-tracker/issues/2",
+      "status": "In Progress"
+    },
+    {
+      "id": "US03",
+      "title": "Create and list assignments",
+      "suggestedOwner": "Kevin",
+      "url": "https://github.com/vkulesh-netizen/student-assignment-tracker/issues/3",
+      "status": "In Progress"
+    },
+    {
+      "id": "US04",
+      "title": "Edit and delete assignments",
+      "suggestedOwner": "Kevin",
+      "url": "https://github.com/vkulesh-netizen/student-assignment-tracker/issues/4",
+      "status": "In Progress"
+    },
+    {
+      "id": "US05",
+      "title": "Connect models to MongoDB Atlas",
+      "suggestedOwner": "Rihab",
+      "url": "https://github.com/vkulesh-netizen/student-assignment-tracker/issues/5",
+      "status": "In Progress"
+    },
+    {
+      "id": "US06",
+      "title": "Organize Express with MVC",
+      "suggestedOwner": "Rihab",
+      "url": "https://github.com/vkulesh-netizen/student-assignment-tracker/issues/6",
+      "status": "In Progress"
+    },
+    {
+      "id": "US07",
+      "title": "Validate authentication and ownership",
+      "suggestedOwner": "Vitaliy",
+      "url": "https://github.com/vkulesh-netizen/student-assignment-tracker/issues/7",
+      "status": "In Progress"
+    },
+    {
+      "id": "US08",
+      "title": "Build login and register interface",
+      "suggestedOwner": "Vitaliy",
+      "url": "https://github.com/vkulesh-netizen/student-assignment-tracker/issues/8",
+      "status": "In Progress"
+    },
+    {
+      "id": "US09",
+      "title": "Test assignment APIs and browser flow",
+      "suggestedOwner": "Ebana",
+      "url": "https://github.com/vkulesh-netizen/student-assignment-tracker/issues/9",
+      "status": "In Progress"
+    },
+    {
+      "id": "US10",
+      "title": "Build assignment dashboard and editor",
+      "suggestedOwner": "Ebana",
+      "url": "https://github.com/vkulesh-netizen/student-assignment-tracker/issues/10",
+      "status": "In Progress"
+    },
+    {
+      "id": "US11",
+      "title": "Review and sign team contract",
+      "suggestedOwner": "All members",
+      "url": "https://github.com/vkulesh-netizen/student-assignment-tracker/issues/11",
+      "status": "Todo"
+    },
+    {
+      "id": "US12",
+      "title": "Record and upload demonstration",
+      "suggestedOwner": "All members",
+      "url": "https://github.com/vkulesh-netizen/student-assignment-tracker/issues/12",
+      "status": "Todo"
+    },
+    {
+      "id": "US13",
+      "title": "Create live Agile board and member commits",
+      "suggestedOwner": "All members",
+      "url": "https://github.com/vkulesh-netizen/student-assignment-tracker/issues/13",
+      "status": "Todo"
+    },
+    {
+      "id": "US14",
+      "title": "Add password recovery and reminders",
+      "suggestedOwner": "Unassigned",
+      "url": "https://github.com/vkulesh-netizen/student-assignment-tracker/issues/14",
+      "status": "Todo"
+    }
+  ]
+}

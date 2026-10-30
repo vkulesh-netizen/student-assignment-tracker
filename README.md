@@ -4,6 +4,10 @@ Student Assignment Tracker for COMP229 Web Application Development, Section 404,
 
 A MERN application for managing personal assignments. Students register, sign in, and create, view, edit, complete, reopen, or delete their own assignments. The dashboard includes course/text search, status filters, due-date sorting, priority sorting, and overdue counts.
 
+Private source repository: https://github.com/vkulesh-netizen/student-assignment-tracker
+
+Private Agile project with Product backlog and Task board views: https://github.com/users/vkulesh-netizen/projects/1
+
 ## Run locally
 
 Prerequisite: Node.js 24 LTS and access to a MongoDB server or Atlas cluster.
