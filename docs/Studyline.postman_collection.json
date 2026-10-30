@@ -1,0 +1,219 @@
+{
+  "info": {
+    "name": "Studyline API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:3001/api"
+    },
+    {
+      "key": "assignmentId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Register",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Requested-With",
+            "value": "Studyline"
+          }
+        ],
+        "url": "{{baseUrl}}/auth/register",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Example Student\",\n  \"email\": \"student@example.test\",\n  \"password\": \"replace-with-a-test-password\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Requested-With",
+            "value": "Studyline"
+          }
+        ],
+        "url": "{{baseUrl}}/auth/login",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"student@example.test\",\n  \"password\": \"replace-with-a-test-password\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Current user",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Requested-With",
+            "value": "Studyline"
+          }
+        ],
+        "url": "{{baseUrl}}/auth/me"
+      }
+    },
+    {
+      "name": "Create assignment",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Requested-With",
+            "value": "Studyline"
+          }
+        ],
+        "url": "{{baseUrl}}/assignments",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Project Part 1\",\n  \"course\": \"COMP229\",\n  \"dueDate\": \"2026-11-15\",\n  \"priority\": \"High\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Created', () => pm.response.to.have.status(201));",
+              "pm.collectionVariables.set('assignmentId', pm.response.json().assignment._id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "List assignments",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Requested-With",
+            "value": "Studyline"
+          }
+        ],
+        "url": "{{baseUrl}}/assignments"
+      }
+    },
+    {
+      "name": "Read assignment",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Requested-With",
+            "value": "Studyline"
+          }
+        ],
+        "url": "{{baseUrl}}/assignments/{{assignmentId}}"
+      }
+    },
+    {
+      "name": "Update status",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Requested-With",
+            "value": "Studyline"
+          }
+        ],
+        "url": "{{baseUrl}}/assignments/{{assignmentId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"Completed\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Delete assignment",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Requested-With",
+            "value": "Studyline"
+          }
+        ],
+        "url": "{{baseUrl}}/assignments/{{assignmentId}}"
+      }
+    },
+    {
+      "name": "Logout",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Requested-With",
+            "value": "Studyline"
+          }
+        ],
+        "url": "{{baseUrl}}/auth/logout"
+      }
+    }
+  ]
+}

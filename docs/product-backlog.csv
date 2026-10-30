@@ -1,0 +1,15 @@
+ID,Title,Suggested owner,Priority,Status,Acceptance criteria
+US01,Register and sign in,Hamzah,High,Implemented locally,Valid user can sign in; invalid credentials fail.
+US02,Keep each user's assignments private,Hamzah,High,Implemented locally,User B cannot read or change user A records.
+US03,Create and list assignments,Kevin,High,Implemented locally,Required fields persist in MongoDB.
+US04,Edit and delete assignments,Kevin,High,Implemented locally,Partial edits preserve other fields; deletion removes the record.
+US05,Connect models to MongoDB Atlas,Rihab,High,Verified,"Dedicated app database, schemas and owner/date index."
+US06,Organize Express with MVC,Rihab,High,Implemented locally,"Separate models, routes, controllers and middleware."
+US07,Validate authentication and ownership,Vitaliy,High,Verified,Backend integration tests cover sessions and access boundaries.
+US08,Build login and register interface,Vitaliy,High,Implemented locally,Responsive accessible forms show validation errors.
+US09,Test assignment APIs and browser flow,Ebana,High,Verified,"CRUD, dates, statuses, filtering, and dialogs work."
+US10,Build assignment dashboard and editor,Ebana,High,Implemented locally,"Search, status filters, priorities and due dates."
+US11,Review and sign team contract,All members,High,Needs team,"Agree expectations, add IDs and real signatures."
+US12,Record and upload demonstration,All members,High,Needs team,5-10 minute video with real photos and code explanation.
+US13,Create live Agile board and member commits,All members,High,Needs team,Actual board plus meaningful commits from each member.
+US14,Add password recovery and reminders,Unassigned,Low,Future,Design and validate account recovery and opt-in reminders.
