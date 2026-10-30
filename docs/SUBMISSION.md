@@ -5,18 +5,18 @@
 - MERN application with MongoDB persistence, Express MVC routes/controllers, authentication/authorization, and full assignment CRUD.
 - Backend test suite, browser workflow test, CI workflow, API reference and Postman collection.
 - External Design Document v1 and product backlog snapshot.
-- Group logo and unsigned contract draft for team review.
+- Group logo and contract with Vitaliy Kulesh's student number and signature. Four member signatures remain pending.
 - Presentation starter and demonstration script.
 
 ## Team actions before submission
 
 1. Review all generated code together and follow the instructor's AI-use policy. Each member must make their own meaningful, attributable contribution and understand the implementation.
-2. Agree on the final team name, duties, meeting time, contract expectations, and corrective actions. Fill real student numbers, then obtain all five real signatures. Export the signed contract to PDF.
-3. Replace the presentation's photo placeholders with current real member photos and add real student IDs. Confirm the final role labels with everyone.
+2. Agree on the final team name, duties, meeting time, contract expectations, and corrective actions. Vitaliy Kulesh's student number and signature are included. Collect the other four members' student numbers and real signatures before submitting the contract.
+3. Vitaliy Kulesh's portrait and student number are included in the presentation. Replace the remaining four photo placeholders with current real member photos and add those members' student IDs. Confirm the final role labels with everyone.
 4. Add the members as repository collaborators using their actual GitHub accounts. Give the instructor the access they require to the private repository.
 5. Review the live GitHub Projects Product backlog and Task board at https://github.com/users/vkulesh-netizen/projects/1. The repository has 14 linked issues with acceptance criteria and suggested starting owners. Project access is separate from repository access, so give the team and instructor appropriate project access. Record actual progress and export a fresh snapshot before submission. The included PDF records the prepared board state.
 6. Record a 5-10 minute demo with the two required introductory slides, working UI/API functionality, and code explanations by team members. Upload it to the team's selected streaming provider and record its URL.
 7. Confirm the end-of-Week-9 deadline in the course site. The assignment text does not provide a calendar date.
 8. Submit a ZIP of source files, EDD v1 PDF, signed contract PDF, logo PDF, GitHub URL, demo video URL, and current backlog PDF to Luminate as directed. Do not include .env, node_modules, database passwords, or test browser binaries.
 
-No signatures, student numbers, real photos, member commits, or video URLs have been fabricated. Do not submit the unsigned draft as a signed contract.
+No signatures, student numbers, real photos, member commits, or video URLs have been fabricated. The current contract is partially signed and still requires the other four members' signatures.

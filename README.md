@@ -68,6 +68,10 @@ The included `render.yaml` is a deployment blueprint, not evidence of a live dep
 
 ## Team responsibilities
 
+[Member photo and signature upload instructions](docs/TEAM-UPLOAD-GUIDE.md)
+
+[Upload member files](https://github.com/vkulesh-netizen/student-assignment-tracker/upload/main/docs/member-submissions)
+
 Starting assignments from the random allocation, subject to team agreement:
 
 | Member           | Starting responsibilities                                       |
