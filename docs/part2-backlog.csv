@@ -1,0 +1,11 @@
+ID,Work item,State,Acceptance evidence
+SL01,Public landing and authentication,Verified locally,"Landing shows examples. API tests cover sign-up, sign-in and sessions."
+SL02,Assignment CRUD and filters,Verified locally,"Owner-scoped list, create, edit and delete. Workspace filters by date and status."
+SL03,My profile and account deletion,Verified locally,Save name/email; password-confirmed deletion removes account and its records.
+SL04,Unit and API testing,Verified locally,3 unit tests and 9 integration tests passed.
+SL05,Cypress recording,Spec prepared; startup failed,Cypress startup failed locally. Playwright video and snapshots are available.
+SL06,Cloud deployment and Atlas,Open,Atlas ping passed. Connect Render to the repository and verify the public URL.
+SL07,CI/CD branch and screenshots,Open,"Push a feature branch, merge, verify deployment, and capture hosted before/after screenshots."
+SL08,EDD v3 and backlog snapshot,Prepared,Release documentation and current local work-item snapshot.
+SL09,Part A demonstration,MP4 prepared,Narrated local walkthrough and transcript are ready. Streaming link is pending.
+SL10,Update live project board,Updated,Part 2 items are on GitHub Projects. Profile and local verification are Done.

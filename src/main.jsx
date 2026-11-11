@@ -67,6 +67,15 @@ function App() {
     [deleting, setDeleting] = useState(null),
     [notice, setNotice] = useState("");
   const [busyId, setBusyId] = useState(null);
+  function clearSession() {
+    setUser(null);
+    setItems([]);
+    setView("All assignments");
+    setSearch("");
+    setStatus("All statuses");
+    setSort("due");
+    setError("");
+  }
   async function load() {
     setLoading(true);
     setError("");
@@ -101,9 +110,7 @@ function App() {
   async function logout() {
     try {
       await api("/auth/logout", { method: "POST" });
-      setUser(null);
-      setItems([]);
-      setError("");
+      clearSession();
     } catch (e) {
       setError(e.message);
     }
@@ -162,7 +169,7 @@ function App() {
       <aside className="sidebar">
         <Brand />
         <div className="workspace-label">YOUR WORKSPACE</div>
-        <nav aria-label="Assignment views">
+        <nav aria-label="Workspace views">
           {[
             ["All assignments", "▦"],
             ["Upcoming", "◷"],
@@ -172,6 +179,7 @@ function App() {
             <button
               className={view === label ? "nav-item selected" : "nav-item"}
               key={label}
+              aria-current={view === label ? "page" : undefined}
               onClick={() => setView(label)}
             >
               <span aria-hidden="true">{icon}</span>
@@ -187,6 +195,13 @@ function App() {
               </small>
             </button>
           ))}
+          <button
+            className={view === "My profile" ? "nav-item selected" : "nav-item"}
+            aria-current={view === "My profile" ? "page" : undefined}
+            onClick={() => setView("My profile")}
+          >
+            <span aria-hidden="true">○</span> My profile
+          </button>
         </nav>
         <div className="sidebar-note">
           <span className="little-star">✦</span>
@@ -226,7 +241,10 @@ function App() {
             })}
           </span>
         </header>
-        <div className="main-content">
+        {view === "My profile" && (
+          <Profile user={user} onSaved={setUser} onDeleted={clearSession} />
+        )}
+        <div className="main-content" hidden={view === "My profile"}>
           <section className="page-heading">
             <div>
               <div className="eyebrow">A CLEARER HEAD STARTS HERE</div>
@@ -445,7 +463,7 @@ function App() {
             )}
           </section>
           <footer>
-            Made for a calmer semester.<span>STUDYLINE · GROUP 2</span>
+            Made for a calmer semester.<span>STUDYLINE · VITALIY KULESH</span>
           </footer>
         </div>
       </main>
@@ -483,6 +501,135 @@ function App() {
     </div>
   );
 }
+function Profile({ user, onSaved, onDeleted }) {
+  const [busy, setBusy] = useState(false);
+  const [notice, setNotice] = useState("");
+  const [error, setError] = useState("");
+  const [confirmDelete, setConfirmDelete] = useState(false);
+
+  async function submit(event, method) {
+    event.preventDefault();
+    setBusy(true);
+    setNotice("");
+    setError("");
+    const values = Object.fromEntries(new FormData(event.currentTarget));
+    try {
+      const result = await api("/auth/me", {
+        method,
+        body: JSON.stringify(values),
+      });
+      if (method === "DELETE") {
+        onDeleted();
+      } else {
+        onSaved(result.user);
+        setNotice("Profile saved.");
+      }
+    } catch (failure) {
+      setError(failure.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="main-content">
+      <section className="page-heading">
+        <div>
+          <h1>My profile</h1>
+          <p>Manage your Studyline account.</p>
+        </div>
+      </section>
+      <div className="profile-card">
+        <form
+          className="profile-form"
+          onSubmit={(event) => submit(event, "PATCH")}
+        >
+          <label>
+            Full name
+            <input
+              name="name"
+              defaultValue={user.name}
+              autoComplete="name"
+              required
+              minLength={2}
+              maxLength={80}
+            />
+          </label>
+          <label>
+            Email address
+            <input
+              name="email"
+              type="email"
+              defaultValue={user.email}
+              autoComplete="email"
+              required
+              maxLength={254}
+            />
+          </label>
+          <button className="primary" disabled={busy || confirmDelete}>
+            Save profile
+          </button>
+        </form>
+        {notice && <p role="status">{notice}</p>}
+        <section className="account-deletion">
+          <h2>Delete account</h2>
+          <p>Deleting your account permanently removes your assignments.</p>
+          {confirmDelete ? (
+            <form
+              className="profile-form"
+              onSubmit={(event) => submit(event, "DELETE")}
+            >
+              <label>
+                Confirm password
+                <input
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  minLength={12}
+                  maxLength={72}
+                />
+              </label>
+              <div className="profile-actions">
+                <button
+                  type="button"
+                  className="secondary"
+                  disabled={busy}
+                  onClick={() => {
+                    setConfirmDelete(false);
+                    setError("");
+                  }}
+                >
+                  Cancel
+                </button>
+                <button className="danger" disabled={busy}>
+                  Permanently delete account
+                </button>
+              </div>
+            </form>
+          ) : (
+            <button
+              className="danger"
+              disabled={busy}
+              onClick={() => {
+                setConfirmDelete(true);
+                setError("");
+              }}
+            >
+              Delete my account
+            </button>
+          )}
+        </section>
+        {error && (
+          <p className="error" role="alert">
+            {error}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function Auth({ onAuth, initialError }) {
   const [register, setRegister] = useState(false),
     [busy, setBusy] = useState(false),
@@ -519,24 +666,24 @@ function Auth({ onAuth, initialError }) {
             <br />
             Know what’s next and keep moving forward.
           </p>
-          <div className="illustration" aria-hidden="true">
+          <div className="illustration" aria-label="Example assignments">
             <div className="paper">
-              <span className="paper-label">YOUR WEEK, SIMPLIFIED</span>
+              <span className="paper-label">EXAMPLE ASSIGNMENTS</span>
               <div>
-                ✓ <span>Start with a plan</span>
+                ✓ <span>COMP229 · API worksheet</span>
               </div>
               <div>
-                ✓ <span>Make a little progress</span>
+                ✓ <span>COMM170 · Outline draft</span>
               </div>
               <div>
-                ○ <span>Celebrate the finish</span>
+                ○ <span>COMP229 · Project release</span>
               </div>
             </div>
             <span className="floating-star">✦</span>
             <span className="floating-note">You’ve got this.</span>
           </div>
         </div>
-        <small>STUDYLINE · BUILT BY GROUP 2</small>
+        <small>STUDYLINE · INDIVIDUAL PROJECT</small>
       </section>
       <main className="auth-main">
         <div className="auth-form">

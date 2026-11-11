@@ -47,3 +47,12 @@ Errors return `{ "message": "Readable explanation" }`. Codes: 400 invalid input/
 7. Sign back in as A and delete its test assignment. Confirm GET returns 404.
 
 Use the included Postman collection for the same steps. Set the baseUrl variable and let Postman keep cookies. Never include real passwords in exported collections.
+
+## Part 2 account endpoints
+
+| Method | Route | Request | Result |
+| --- | --- | --- | --- |
+| PATCH | /api/auth/me | name and email | 200 with the updated current account |
+| DELETE | /api/auth/me | current password | 204 and cleared session cookie |
+
+Both endpoints require authentication. Account deletion also removes the account's assignments in a MongoDB transaction. The database must support transactions.

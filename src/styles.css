@@ -1010,3 +1010,39 @@ form label textarea {
     padding-right: 10px;
   }
 }
+
+.profile-card {
+  max-width: 640px;
+  background: white;
+  border: 1px solid #e1e5eb;
+  border-radius: 16px;
+  padding: clamp(18px, 4vw, 36px);
+}
+.profile-form {
+  display: grid;
+  gap: 16px;
+}
+.profile-form label {
+  display: grid;
+  gap: 6px;
+}
+.profile-form input {
+  width: 100%;
+  border: 1px solid #cbd2dc;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font: inherit;
+}
+.profile-form > button {
+  justify-self: start;
+}
+.account-deletion {
+  border-top: 1px solid #e1e5eb;
+  margin-top: 28px;
+  padding-top: 20px;
+}
+.profile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}

@@ -41,11 +41,9 @@ export function createApp(config) {
     message: { message: "Too many sign-in attempts. Try again later." },
   });
   app.get("/api/health", (req, res) =>
-    res
-      .status(mongoose.connection.readyState === 1 ? 200 : 503)
-      .json({
-        status: mongoose.connection.readyState === 1 ? "ok" : "unavailable",
-      }),
+    res.status(mongoose.connection.readyState === 1 ? 200 : 503).json({
+      status: mongoose.connection.readyState === 1 ? "ok" : "unavailable",
+    }),
   );
   app.use("/api/auth", authRoutes(config, limiter));
   app.use("/api/assignments", assignmentRoutes(config));
@@ -54,9 +52,23 @@ export function createApp(config) {
   );
   const dist = fileURLToPath(new URL("../dist", import.meta.url));
   if (fs.existsSync(dist)) {
-    app.use(express.static(dist));
+    app.use(
+      "/assets",
+      express.static(path.join(dist, "assets"), {
+        immutable: true,
+        maxAge: "1y",
+      }),
+    );
+    app.use(
+      express.static(dist, {
+        setHeaders: (res, file) => {
+          if (path.extname(file) === ".html")
+            res.set("Cache-Control", "no-cache");
+        },
+      }),
+    );
     app.get("/{*path}", (req, res) =>
-      res.sendFile(path.join(dist, "index.html")),
+      res.set("Cache-Control", "no-cache").sendFile(path.join(dist, "index.html")),
     );
   }
   app.use((error, req, res, next) => {
@@ -77,3 +89,4 @@ export function createApp(config) {
   });
   return app;
 }
+
