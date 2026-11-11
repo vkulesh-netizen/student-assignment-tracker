@@ -16,6 +16,9 @@ export const registerSchema = z
       ),
   })
   .strict();
+export const profileSchema = registerSchema.pick({ name: true, email: true });
+export const deleteAccountSchema = registerSchema.pick({ password: true });
+
 export const loginSchema = z
   .object({
     email: z
@@ -57,13 +60,11 @@ export function validate(schema) {
   return (req, res, next) => {
     const result = schema.safeParse(req.body);
     if (!result.success)
-      return res
-        .status(400)
-        .json({
-          message: result.error.issues
-            .map((i) => `${i.path.join(".") || "Request"}: ${i.message}`)
-            .join(" "),
-        });
+      return res.status(400).json({
+        message: result.error.issues
+          .map((i) => `${i.path.join(".") || "Request"}: ${i.message}`)
+          .join(" "),
+      });
     req.validated = result.data;
     next();
   };

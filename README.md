@@ -1,89 +1,41 @@
-# Studyline
+# Studyline Part 2 release
 
-Student Assignment Tracker for COMP229 Web Application Development, Section 404, Group 2.
+Vitaliy Kulesh · 301559060 · COMP229 Web Application Development · Section 404
 
-A MERN application for managing personal assignments. Students register, sign in, and create, view, edit, complete, reopen, or delete their own assignments. The dashboard includes course/text search, status filters, due-date sorting, priority sorting, and overdue counts.
+Studyline is a React, Express and MongoDB application for tracking student assignments. Part 2 adds public example assignments and a My profile view with account update and password-confirmed account deletion. The signed-in workspace supports assignment CRUD, search, sorting and status/date filters.
 
-Private source repository: https://github.com/vkulesh-netizen/student-assignment-tracker
+- Repository: https://github.com/vkulesh-netizen/student-assignment-tracker
+- Product backlog and task board: https://github.com/users/vkulesh-netizen/projects/1
 
-Private Agile project with Product backlog and Task board views: https://github.com/users/vkulesh-netizen/projects/1
+## Run the release locally
 
-## Run locally
+Use Node.js 24. Run `npm ci` then `npm run build`. Copy `.env.example` to `.env` and set a new `JWT_SECRET` of at least 32 characters. Set `APP_ORIGIN=http://127.0.0.1:3001` for the production-style preview. Use an Atlas connection or a replica set in `MONGODB_URI` because account deletion uses a transaction. Run `npm start` and open http://127.0.0.1:3001.
 
-Prerequisite: Node.js 24 LTS and access to a MongoDB server or Atlas cluster.
-
-```sh
-npm ci
-```
-
-Copy `.env.example` to `.env`. Set `MONGODB_URI` to your database connection string and `JWT_SECRET` to a random secret of at least 32 characters. Set `APP_ORIGIN=http://localhost:5173` for development. Keep `.env` private.
-
-```sh
-npm run dev
-```
-
-Open http://localhost:5173. The Vite development server proxies `/api` requests to Express on port 3001.
-
-For a local production-style preview:
-
-```sh
-npm run build
-```
-
-Set `APP_ORIGIN=http://127.0.0.1:3001` in `.env`, then run `npm start` and open http://127.0.0.1:3001. Register your own app account. Atlas database credentials are server configuration, not an app login.
+For a disposable local database, set `LOCAL_TEST_DB=true` in a non-production shell. The app starts an isolated MongoDB replica set and ignores `MONGODB_URI` for that run. Keep connection credentials and session secrets out of Git.
 
 ## Verification
 
-```sh
-npm test
-npm run build
-npx playwright install chromium
-npm run test:ui
-```
+- Unit: `node --test tests/validation.test.js`.
+- API and unit: `npm test`.
+- Playwright: `npx playwright install chromium`, then `npm run test:ui` after building.
+- Cypress: run `npx cypress install`, start the local app on port 3001, then run `npm run test:cypress`. To use another port, set `STUDYLINE_BASE_URL` to its origin. The spec records the end-to-end run and saves snapshots after successful changes. Use a disposable database for this run.
+- Performance: Express serves Vite's hashed assets with a one-year immutable cache and requires revalidation of the HTML entry point. The local production build and HTTP header measurements are in the release evidence.
 
-The backend suite starts a disposable real MongoDB server. It covers registration, password hashing, cookie attributes, login/logout, invalid data, duplicate accounts, CRUD persistence, ownership protection, missing/forged sessions, CSRF defenses, and authentication rate limiting. The browser suite covers the main user workflow. Do not point automated test fixtures at an existing production database.
+The React API client sends same-origin JSON requests to Express. The auth endpoints validate data and issue an HTTP-only session cookie. Account deletion checks the current password and deletes the owner and related assignments in one MongoDB transaction. Assignment reads and writes use the authenticated owner's ID.
 
-## Architecture
+## Cloud deployment and CI/CD evidence
 
-- `src/`: React views, form dialogs, responsive styles, API client.
-- `server/models/`: Mongoose User and Assignment schemas.
-- `server/controllers/`: authentication and assignment operations.
-- `server/routes/`: Express API routes.
-- `server/middleware/`: JWT sessions, validation, authorization.
-- `tests/`: backend integration and browser tests.
-- `docs/`: API guide, backlog, demonstration guide, submission materials.
-- `.github/workflows/ci.yml`: backend tests and production build on pushes/PRs.
+1. Connect the GitHub repository to the Render blueprint in `render.yaml`. Set `MONGODB_URI` in Render using the Atlas connection string for this application. Render supplies the service URL and generates `JWT_SECRET`. For a custom origin, set `APP_ORIGIN` explicitly.
+2. Verify the public app and its `/api/health` endpoint. Use an application test account to check sign-in and CRUD after deployment.
+3. Before the CI/CD change, capture the deployed landing page. On a feature branch, edit a visible sentence in `src/main.jsx`. Push the branch and open a pull request against `main`. GitHub Actions runs the unit and API suite, production build, and browser tests. Merge after the checks pass.
+4. After Render deploys the merged revision, reload the same public URL and capture the changed page. Record the public URL, pull request, workflow run and deployment in the submission.
+5. Update the live GitHub Projects backlog and task board. The packaged PDF shows local work item states.
 
-## Database and security
+## Part A demonstration
 
-The app uses `student_assignment_tracker` with `users` and `assignments` collections. Each assignment belongs to one user. Every assignment query includes the authenticated owner's ID. Passwords are hashed with bcrypt. JWT sessions use HttpOnly, SameSite=Strict cookies and eight-hour expiry. Production enables Secure cookies and requires an HTTPS APP_ORIGIN. Writes require a custom request header and enforce origin checks. Registration/login are rate limited. Validation rejects unknown fields, invalid dates, and ownership injection.
-
-Use a database user limited to read/write on this app database. Do not commit `.env`, connection passwords, session secrets, or private student records. The local `.env` is excluded from Git and source archives. Public app self-registration is supported; email verification, password reset, and shared assignments are outside this release.
-
-## Deployment
-
-Deploy the Node service using `npm ci && npm run build`, then `npm start`. Configure `NODE_ENV=production`, `MONGODB_URI`, a fresh `JWT_SECRET`, and `APP_ORIGIN=https://your-exact-app-origin`. The server serves both React and the API from one origin. Set `TRUST_PROXY_HOPS` only to the known number of trusted reverse proxies. Production binds to `0.0.0.0` and uses the platform's PORT.
-
-The included `render.yaml` is a deployment blueprint, not evidence of a live deployment. No paid service is required by the code. Confirm any hosting plan before provisioning it.
-
-## Team responsibilities
-
-[Member photo and signature upload instructions](docs/TEAM-UPLOAD-GUIDE.md)
-
-[Upload member files](https://github.com/vkulesh-netizen/student-assignment-tracker/upload/main/docs/member-submissions)
-
-Starting assignments from the random allocation, subject to team agreement:
-
-| Member           | Starting responsibilities                                       |
-| ---------------- | --------------------------------------------------------------- |
-| Hamzah Al-Samadi | Authentication and authorization APIs                           |
-| Kevin Mai        | Assignment CRUD APIs and input validation                       |
-| Rihab Chowdhury  | MongoDB models, database connection, Express MVC setup          |
-| Vitaliy Kulesh   | Authentication tests, login/register wireframes and React pages |
-| Ebana Almahamid  | Assignment tests, assignment wireframes and React pages         |
-
-Each member should review, understand, improve, test, and commit their own work. The initial scaffold was prepared with Codex assistance. Initial generated code is not evidence of individual member contributions. Follow the instructor's policy on AI assistance and attribution.
-
-## Submission status
-
-The source and prepared documentation do not replace the group's signed contract, real student IDs/photos, authentic member commits, a live Agile board, or the recorded 5-10 minute demonstration. See `docs/SUBMISSION.md` for remaining team actions.
+1. 0:00–0:45 · Show the two introductory slides. Introduce Studyline and your role.
+2. 0:45–2:00 · Show the public examples, register or sign in, and explain the current-view indicator.
+3. 2:00–4:00 · Create an assignment, open its card, edit it, change its status, filter it and delete it.
+4. 4:00–5:15 · Open My profile, update a test account and demonstrate password-confirmed account deletion. Sign in with another test account and show Sign out.
+5. 5:15–6:30 · Explain the React API client, Express routes, Mongoose ownership model and account deletion transaction. Show the test result and project board.
+6. Upload the narrated recording to the course-approved streaming provider and include the link with the Part A submission.

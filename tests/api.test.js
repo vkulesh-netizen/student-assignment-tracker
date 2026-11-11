@@ -1,7 +1,7 @@
 import { test, before, after, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import mongoose from "mongoose";
-import { MongoMemoryServer } from "mongodb-memory-server";
+import { MongoMemoryReplSet } from "mongodb-memory-server";
 import request from "supertest";
 import { createApp } from "../server/app.js";
 import User from "../server/models/User.js";
@@ -27,7 +27,10 @@ const signup = (agent, data = account) =>
 before(async () => {
   await mkdir(".test-data", { recursive: true });
   dbPath = await mkdtemp(path.resolve(".test-data", "api-"));
-  mongo = await MongoMemoryServer.create({ instance: { dbPath } });
+  mongo = await MongoMemoryReplSet.create({
+    instanceOpts: [{ dbPath }],
+    replSet: { count: 1 },
+  });
   await mongoose.connect(mongo.getUri());
   await User.init();
   await Assignment.init();
@@ -258,5 +261,71 @@ test("rate limits authentication attempts", async () => {
         .send({ email: account.email, password: "wrong" })
     ).status,
     429,
+  );
+});
+
+test("account owner can edit and delete their profile and assignments", async () => {
+  const agent = request.agent(app);
+  const other = request.agent(app);
+  assert.equal((await signup(agent)).status, 201);
+  assert.equal(
+    (await signup(other, { ...account, email: "other@example.test" })).status,
+    201,
+  );
+  assert.equal(
+    (await agent.post("/api/assignments").set(header).send(assignment)).status,
+    201,
+  );
+  assert.equal(
+    (await other.post("/api/assignments").set(header).send(assignment)).status,
+    201,
+  );
+
+  const profile = { name: "Updated Student", email: "updated@example.test" };
+  const updated = await agent.patch("/api/auth/me").set(header).send(profile);
+  assert.equal(updated.status, 200);
+  assert.equal(updated.body.user.name, profile.name);
+  assert.equal(
+    (await agent.get("/api/auth/me")).body.user.email,
+    profile.email,
+  );
+  assert.equal(
+    (
+      await agent
+        .patch("/api/auth/me")
+        .set(header)
+        .send({ ...profile, email: "other@example.test" })
+    ).status,
+    409,
+  );
+
+  assert.equal(
+    (
+      await agent
+        .delete("/api/auth/me")
+        .set(header)
+        .send({ password: "incorrect-password" })
+    ).status,
+    401,
+  );
+  assert.equal((await agent.get("/api/auth/me")).status, 200);
+  assert.equal(
+    (
+      await agent
+        .delete("/api/auth/me")
+        .set(header)
+        .send({ password: account.password })
+    ).status,
+    204,
+  );
+  assert.equal((await agent.get("/api/auth/me")).status, 401);
+  assert.equal(await User.exists({ email: profile.email }), null);
+  assert.equal(
+    await Assignment.countDocuments({ owner: updated.body.user.id }),
+    0,
+  );
+  assert.equal(
+    (await other.get("/api/assignments")).body.assignments.length,
+    1,
   );
 });

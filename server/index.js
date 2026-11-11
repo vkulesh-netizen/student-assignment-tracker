@@ -12,20 +12,24 @@ try {
     process.env.LOCAL_TEST_DB === "true" &&
     process.env.NODE_ENV !== "production"
   ) {
-    const { MongoMemoryServer } = await import("mongodb-memory-server");
+    const { MongoMemoryReplSet } = await import("mongodb-memory-server");
     await mkdir(".test-data", { recursive: true });
     const dbPath = await mkdtemp(path.resolve(".test-data", "preview-"));
-    memory = await MongoMemoryServer.create({ instance: { dbPath } });
+    memory = await MongoMemoryReplSet.create({
+      instanceOpts: [{ dbPath }],
+      replSet: { count: 1 },
+    });
     uri = memory.getUri("studyline");
   }
   if (!uri) throw new Error("Set MONGODB_URI in your local .env file.");
   const production = process.env.NODE_ENV === "production";
-  if (production && !process.env.APP_ORIGIN?.startsWith("https://"))
+  const appOrigin = process.env.APP_ORIGIN || process.env.RENDER_EXTERNAL_URL;
+  if (production && !appOrigin?.startsWith("https://"))
     throw new Error("Set APP_ORIGIN to your HTTPS application origin.");
   const app = createApp({
     jwtSecret: process.env.JWT_SECRET,
     production,
-    appOrigin: process.env.APP_ORIGIN || "http://localhost:5173",
+    appOrigin: appOrigin || "http://localhost:5173",
     trustProxy: process.env.TRUST_PROXY_HOPS
       ? Number(process.env.TRUST_PROXY_HOPS)
       : false,
